@@ -192,17 +192,17 @@ namespace SimpleXmlEditor
             }
         }
 
-        private void LoadXml()
+        private void LoadXml(string fileName = "stable_us.xml")
         {
             try
             {
-                if (!File.Exists("stable_us.xml"))
+                if (!File.Exists(fileName))
                 {
-                    AddLog("❌ stable_us.xml not found");
+                    AddLog($"❌ {fileName} not found");
                     return;
                 }
 
-                var doc = XDocument.Load("stable_us.xml");
+                var doc = XDocument.Load(fileName);
                 var ns = XNamespace.Get("urn:schemas-microsoft-com:office:spreadsheet");
                 var rows = doc.Descendants(ns + "Row");
 
@@ -256,7 +256,7 @@ namespace SimpleXmlEditor
             }
         }
 
-        private void SaveXml()
+        private void SaveXml(string fileName = "stable_us.xml")
         {
             try
             {
@@ -318,11 +318,11 @@ namespace SimpleXmlEditor
                     workbook
                 );
 
-                doc.Save("stable_us.xml");
+                doc.Save(fileName);
                 SaveConfig(); // Save cache too
                 
-                StatusText.Text = $"Saved {_entries.Count} entries";
-                AddLog($"💾 XML saved - {_entries.Count} entries");
+                StatusText.Text = $"Saved {_entries.Count} entries to {Path.GetFileName(fileName)}";
+                AddLog($"💾 XML saved to {fileName} - {_entries.Count} entries");
             }
             catch (Exception ex)
             {
@@ -1076,12 +1076,35 @@ Only return the JSON, no explanations or additional text.";
         // Event Handlers
         private void LoadBtn_Click(object sender, RoutedEventArgs e)
         {
-            LoadXml();
+            var openFileDialog = new Microsoft.Win32.OpenFileDialog
+            {
+                Title = "Select XML Localization File",
+                Filter = "XML Files (*.xml)|*.xml|All Files (*.*)|*.*",
+                DefaultExt = "xml",
+                CheckFileExists = true,
+                CheckPathExists = true
+            };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                LoadXml(openFileDialog.FileName);
+            }
         }
 
         private void SaveBtn_Click(object sender, RoutedEventArgs e)
         {
-            SaveXml();
+            var saveFileDialog = new Microsoft.Win32.SaveFileDialog
+            {
+                Title = "Save XML Localization File",
+                Filter = "XML Files (*.xml)|*.xml|All Files (*.*)|*.*",
+                DefaultExt = "xml",
+                FileName = "localized.xml"
+            };
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                SaveXml(saveFileDialog.FileName);
+            }
         }
 
         private void SettingsBtn_Click(object sender, RoutedEventArgs e)
