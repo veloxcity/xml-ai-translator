@@ -1,0 +1,323 @@
+<Window x:Class="SimpleXmlEditor.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Settings - XML AI Translator" Height="400" Width="600"
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize" 
+        Background="#F5F5F5">
+    
+    <Window.Resources>
+        <!-- Modern Button Style -->
+        <Style x:Key="ModernButton" TargetType="Button">
+            <Setter Property="Background" Value="#2196F3"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="16,10"/>
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                CornerRadius="6" 
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                            VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#1976D2"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Background" Value="#1565C0"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Success Button Style -->
+        <Style x:Key="SuccessButton" TargetType="Button" BasedOn="{StaticResource ModernButton}">
+            <Setter Property="Background" Value="#4CAF50"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#45a049"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Secondary Button Style -->
+        <Style x:Key="SecondaryButton" TargetType="Button" BasedOn="{StaticResource ModernButton}">
+            <Setter Property="Background" Value="#9E9E9E"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#757575"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Modern TextBox Style -->
+        <Style x:Key="ModernTextBox" TargetType="TextBox">
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}" 
+                                BorderThickness="{TemplateBinding BorderThickness}" 
+                                CornerRadius="6">
+                            <ScrollViewer x:Name="PART_ContentHost" 
+                                         Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter Property="BorderBrush" Value="#2196F3"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Modern ComboBox Style -->
+        <Style x:Key="ModernComboBox" TargetType="ComboBox">
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+    </Window.Resources>
+
+    <Border Background="White" CornerRadius="12" Margin="16">
+        <Border.Effect>
+            <DropShadowEffect Color="#E0E0E0" Direction="270" ShadowDepth="4" BlurRadius="16" Opacity="0.3"/>
+        </Border.Effect>
+        
+        <Grid Margin="32">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,24">
+                <TextBlock Text="⚙️" FontSize="24" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                <StackPanel>
+                    <TextBlock Text="AI Configuration" FontSize="20" FontWeight="Bold" Foreground="#1976D2"/>
+                    <TextBlock Text="Configure your Gemini API settings" FontSize="12" Foreground="#666" Margin="0,2,0,0"/>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- API Key Section -->
+            <StackPanel Grid.Row="1" Margin="0,0,0,20">
+                <TextBlock Text="🔑 API Key" FontSize="14" FontWeight="Bold" Foreground="#424242" Margin="0,0,0,8"/>
+                <TextBox Name="ApiKeyTextBox" Style="{StaticResource ModernTextBox}" 
+                         MaxLength="100"/>
+                <TextBlock Text="Enter your Google Gemini API key from AI Studio" 
+                          FontSize="11" Foreground="#666" Margin="0,4,0,0"/>
+            </StackPanel>
+
+            <!-- Model Selection Section -->
+            <StackPanel Grid.Row="2" Margin="0,0,0,20">
+                <TextBlock Text="🤖 AI Model" FontSize="14" FontWeight="Bold" Foreground="#424242" Margin="0,0,0,8"/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <ComboBox Grid.Column="0" Name="ModelComboBox" 
+                             Style="{StaticResource ModernComboBox}" 
+                             Margin="0,0,12,0">
+                        <!-- Models will be populated dynamically -->
+                    </ComboBox>
+                    
+                    <Button Grid.Column="1" Name="RefreshModelsBtn" 
+                           Content="🔄 Refresh" Click="RefreshModelsBtn_Click" 
+                           Style="{StaticResource ModernButton}" 
+                           Background="#FF9800" Width="100"/>
+                </Grid>
+                <TextBlock Text="Select an AI model with rate limits and pricing info" 
+                          FontSize="11" Foreground="#666" Margin="0,4,0,0"/>
+            </StackPanel>
+
+            <!-- Target Language Section -->
+            <StackPanel Grid.Row="3" Margin="0,0,0,20">
+                <TextBlock Text="🌍 Target Language" FontSize="14" FontWeight="Bold" Foreground="#424242" Margin="0,0,0,8"/>
+                <ComboBox Name="TargetLanguageComboBox" Style="{StaticResource ModernComboBox}">
+                    <ComboBoxItem Content="🇹🇷 Turkish (Türkçe)" Tag="Turkish"/>
+                    <ComboBoxItem Content="🇪🇸 Spanish (Español)" Tag="Spanish"/>
+                    <ComboBoxItem Content="🇫🇷 French (Français)" Tag="French"/>
+                    <ComboBoxItem Content="🇩🇪 German (Deutsch)" Tag="German"/>
+                    <ComboBoxItem Content="🇮🇹 Italian (Italiano)" Tag="Italian"/>
+                    <ComboBoxItem Content="🇵🇹 Portuguese (Português)" Tag="Portuguese"/>
+                    <ComboBoxItem Content="🇷🇺 Russian (Русский)" Tag="Russian"/>
+                    <ComboBoxItem Content="🇯🇵 Japanese (日本語)" Tag="Japanese"/>
+                    <ComboBoxItem Content="🇰🇷 Korean (한국어)" Tag="Korean"/>
+                    <ComboBoxItem Content="🇨🇳 Chinese Simplified (简体中文)" Tag="Chinese (Simplified)"/>
+                    <ComboBoxItem Content="🇹🇼 Chinese Traditional (繁體中文)" Tag="Chinese (Traditional)"/>
+                    <ComboBoxItem Content="🇦🇪 Arabic (العربية)" Tag="Arabic"/>
+                    <ComboBoxItem Content="🇮🇳 Hindi (हिन्दी)" Tag="Hindi"/>
+                    <ComboBoxItem Content="🇳🇱 Dutch (Nederlands)" Tag="Dutch"/>
+                    <ComboBoxItem Content="🇸🇪 Swedish (Svenska)" Tag="Swedish"/>
+                    <ComboBoxItem Content="🇳🇴 Norwegian (Norsk)" Tag="Norwegian"/>
+                    <ComboBoxItem Content="🇩🇰 Danish (Dansk)" Tag="Danish"/>
+                    <ComboBoxItem Content="🇫🇮 Finnish (Suomi)" Tag="Finnish"/>
+                    <ComboBoxItem Content="🇵🇱 Polish (Polski)" Tag="Polish"/>
+                    <ComboBoxItem Content="🇨🇿 Czech (Čeština)" Tag="Czech"/>
+                    <ComboBoxItem Content="🇭🇺 Hungarian (Magyar)" Tag="Hungarian"/>
+                    <ComboBoxItem Content="🇷🇴 Romanian (Română)" Tag="Romanian"/>
+                    <ComboBoxItem Content="🇬🇷 Greek (Ελληνικά)" Tag="Greek"/>
+                    <ComboBoxItem Content="🇧🇬 Bulgarian (Български)" Tag="Bulgarian"/>
+                    <ComboBoxItem Content="🇭🇷 Croatian (Hrvatski)" Tag="Croatian"/>
+                    <ComboBoxItem Content="🇸🇰 Slovak (Slovenčina)" Tag="Slovak"/>
+                    <ComboBoxItem Content="🇸🇮 Slovenian (Slovenščina)" Tag="Slovenian"/>
+                    <ComboBoxItem Content="🇱🇹 Lithuanian (Lietuvių)" Tag="Lithuanian"/>
+                    <ComboBoxItem Content="🇱🇻 Latvian (Latviešu)" Tag="Latvian"/>
+                    <ComboBoxItem Content="🇪🇪 Estonian (Eesti)" Tag="Estonian"/>
+                    <ComboBoxItem Content="🇺🇦 Ukrainian (Українська)" Tag="Ukrainian"/>
+                    <ComboBoxItem Content="🇧🇾 Belarusian (Беларуская)" Tag="Belarusian"/>
+                    <ComboBoxItem Content="🇷🇸 Serbian (Српски)" Tag="Serbian"/>
+                    <ComboBoxItem Content="🇲🇰 Macedonian (Македонски)" Tag="Macedonian"/>
+                    <ComboBoxItem Content="🇦🇱 Albanian (Shqip)" Tag="Albanian"/>
+                    <ComboBoxItem Content="🇲🇹 Maltese (Malti)" Tag="Maltese"/>
+                    <ComboBoxItem Content="🇮🇸 Icelandic (Íslenska)" Tag="Icelandic"/>
+                    <ComboBoxItem Content="🇮🇪 Irish (Gaeilge)" Tag="Irish"/>
+                    <ComboBoxItem Content="🏴󠁧󠁢󠁷󠁬󠁳󠁿 Welsh (Cymraeg)" Tag="Welsh"/>
+                    <ComboBoxItem Content="🇮🇱 Hebrew (עברית)" Tag="Hebrew"/>
+                    <ComboBoxItem Content="🇹🇭 Thai (ไทย)" Tag="Thai"/>
+                    <ComboBoxItem Content="🇻🇳 Vietnamese (Tiếng Việt)" Tag="Vietnamese"/>
+                    <ComboBoxItem Content="🇮🇩 Indonesian (Bahasa Indonesia)" Tag="Indonesian"/>
+                    <ComboBoxItem Content="🇲🇾 Malay (Bahasa Melayu)" Tag="Malay"/>
+                    <ComboBoxItem Content="🇵🇭 Filipino (Filipino)" Tag="Filipino"/>
+                    <ComboBoxItem Content="🇮🇳 Bengali (বাংলা)" Tag="Bengali"/>
+                    <ComboBoxItem Content="🇮🇳 Tamil (தமிழ்)" Tag="Tamil"/>
+                    <ComboBoxItem Content="🇮🇳 Telugu (తెలుగు)" Tag="Telugu"/>
+                    <ComboBoxItem Content="🇮🇳 Marathi (मराठी)" Tag="Marathi"/>
+                    <ComboBoxItem Content="🇮🇳 Gujarati (ગુજરાતી)" Tag="Gujarati"/>
+                    <ComboBoxItem Content="🇮🇳 Kannada (ಕನ್ನಡ)" Tag="Kannada"/>
+                    <ComboBoxItem Content="🇮🇳 Malayalam (മലയാളം)" Tag="Malayalam"/>
+                    <ComboBoxItem Content="🇮🇳 Punjabi (ਪੰਜਾਬੀ)" Tag="Punjabi"/>
+                    <ComboBoxItem Content="🇮🇳 Urdu (اردو)" Tag="Urdu"/>
+                    <ComboBoxItem Content="🇵🇰 Pashto (پښتو)" Tag="Pashto"/>
+                    <ComboBoxItem Content="🇦🇫 Dari (دری)" Tag="Dari"/>
+                    <ComboBoxItem Content="🇮🇷 Persian (فارسی)" Tag="Persian"/>
+                    <ComboBoxItem Content="🇦🇿 Azerbaijani (Azərbaycan)" Tag="Azerbaijani"/>
+                    <ComboBoxItem Content="🇰🇿 Kazakh (Қазақ)" Tag="Kazakh"/>
+                    <ComboBoxItem Content="🇺🇿 Uzbek (O'zbek)" Tag="Uzbek"/>
+                    <ComboBoxItem Content="🇰🇬 Kyrgyz (Кыргыз)" Tag="Kyrgyz"/>
+                    <ComboBoxItem Content="🇹🇯 Tajik (Тоҷикӣ)" Tag="Tajik"/>
+                    <ComboBoxItem Content="🇹🇲 Turkmen (Türkmen)" Tag="Turkmen"/>
+                    <ComboBoxItem Content="🇲🇳 Mongolian (Монгол)" Tag="Mongolian"/>
+                    <ComboBoxItem Content="🇬🇪 Georgian (ქართული)" Tag="Georgian"/>
+                    <ComboBoxItem Content="🇦🇲 Armenian (Հայերեն)" Tag="Armenian"/>
+                    <ComboBoxItem Content="🇪🇹 Amharic (አማርኛ)" Tag="Amharic"/>
+                    <ComboBoxItem Content="🇿🇦 Afrikaans" Tag="Afrikaans"/>
+                    <ComboBoxItem Content="🇿🇦 Zulu (isiZulu)" Tag="Zulu"/>
+                    <ComboBoxItem Content="🇿🇦 Xhosa (isiXhosa)" Tag="Xhosa"/>
+                    <ComboBoxItem Content="🇰🇪 Swahili (Kiswahili)" Tag="Swahili"/>
+                    <ComboBoxItem Content="🇳🇬 Yoruba (Yorùbá)" Tag="Yoruba"/>
+                    <ComboBoxItem Content="🇳🇬 Igbo (Asụsụ Igbo)" Tag="Igbo"/>
+                    <ComboBoxItem Content="🇳🇬 Hausa (Harshen Hausa)" Tag="Hausa"/>
+                </ComboBox>
+                <TextBlock Text="Select the target language for translation" 
+                          FontSize="11" Foreground="#666" Margin="0,4,0,0"/>
+            </StackPanel>
+
+            <!-- Program Language Section -->
+            <StackPanel Grid.Row="4" Margin="0,0,0,20">
+                <TextBlock Text="🌐 Program Language" FontSize="14" FontWeight="Bold" Foreground="#424242" Margin="0,0,0,8"/>
+                <ComboBox Name="ProgramLanguageComboBox" Style="{StaticResource ModernComboBox}">
+                    <ComboBoxItem Content="🇺🇸 English" Tag="en"/>
+                    <ComboBoxItem Content="🇹🇷 Türkçe" Tag="tr"/>
+                    <ComboBoxItem Content="🇪🇸 Español" Tag="es"/>
+                    <ComboBoxItem Content="🇫🇷 Français" Tag="fr"/>
+                    <ComboBoxItem Content="🇩🇪 Deutsch" Tag="de"/>
+                    <ComboBoxItem Content="🇮🇹 Italiano" Tag="it"/>
+                    <ComboBoxItem Content="🇵🇹 Português" Tag="pt"/>
+                    <ComboBoxItem Content="🇷🇺 Русский" Tag="ru"/>
+                    <ComboBoxItem Content="🇯🇵 日本語" Tag="ja"/>
+                    <ComboBoxItem Content="🇰🇷 한국어" Tag="ko"/>
+                    <ComboBoxItem Content="🇨🇳 中文" Tag="zh"/>
+                    <ComboBoxItem Content="🇦🇪 العربية" Tag="ar"/>
+                    <ComboBoxItem Content="🇮🇳 हिन्दी" Tag="hi"/>
+                    <ComboBoxItem Content="🇳🇱 Nederlands" Tag="nl"/>
+                </ComboBox>
+                <TextBlock Text="Select the interface language for the program" 
+                          FontSize="11" Foreground="#666" Margin="0,4,0,0"/>
+            </StackPanel>
+
+            <!-- Custom Prompt Section -->
+            <StackPanel Grid.Row="5" Margin="0,0,0,20">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <TextBlock Grid.Column="0" Text="📝 Custom Prompt" FontSize="14" FontWeight="Bold" Foreground="#424242" Margin="0,0,0,8"/>
+                    <Button Grid.Column="1" Name="ResetPromptBtn" Content="🔄 Reset" 
+                           Click="ResetPromptBtn_Click" 
+                           Style="{StaticResource ModernButton}" 
+                           Background="#9E9E9E" 
+                           FontSize="10" Height="24" Padding="8,2"/>
+                </Grid>
+                
+                <TextBox Name="CustomPromptTextBox" 
+                        Style="{StaticResource ModernTextBox}" 
+                        Height="120" 
+                        TextWrapping="Wrap" 
+                        AcceptsReturn="True" 
+                        VerticalScrollBarVisibility="Auto"
+                        FontFamily="Consolas"
+                        FontSize="11"/>
+                        
+                <TextBlock TextWrapping="Wrap" FontSize="11" Foreground="#666" Margin="0,4,0,0">
+                    Customize the AI translation prompt. Use {LANGUAGE} for target language and {CONTEXT} for content type.
+                </TextBlock>
+            </StackPanel>
+
+            <!-- Info Panel -->
+            <Border Grid.Row="6" Background="#E8F5E8" CornerRadius="8" Padding="16" Margin="0,0,0,20">
+                <StackPanel>
+                    <TextBlock Text="💡 Quick Tips" FontWeight="Bold" Foreground="#2E7D32" Margin="0,0,0,8"/>
+                    <TextBlock TextWrapping="Wrap" FontSize="12" Foreground="#2E7D32">
+                        • Get your free API key from https://aistudio.google.com<LineBreak/>
+                        • Flash models are faster, Pro models are more accurate<LineBreak/>
+                        • Rate limits are automatically optimized per model<LineBreak/>
+                        • Translation cache reduces API costs<LineBreak/>
+                        • 60+ languages supported for translation
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+
+            <!-- Spacer -->
+            <Grid Grid.Row="7"/>
+
+            <!-- Action Buttons -->
+            <StackPanel Grid.Row="8" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+                <Button Name="CancelButton" Content="Cancel" 
+                       Click="CancelButton_Click" 
+                       Style="{StaticResource SecondaryButton}" 
+                       Width="100" Margin="0,0,12,0"/>
+                <Button Name="OkButton" Content="Save &amp; Apply" 
+                       Click="OkButton_Click" 
+                       Style="{StaticResource SuccessButton}" 
+                       Width="120"/>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>
